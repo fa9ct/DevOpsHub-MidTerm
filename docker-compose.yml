@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  redis-db:
+    image: redis:alpine
+    container_name: redis-db
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
+  app1:
+    build: ./app1
+    container_name: devopshub-app1
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis-db
+
+  app2:
+    build: ./app2
+    container_name: devopshub-app2
+    ports:
+      - "5001:5000"
+    depends_on:
+      - redis-db
+
+volumes:
+  redis-data:
